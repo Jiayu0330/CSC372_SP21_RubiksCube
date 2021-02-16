@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
+/* this is the graphics of a cube */
 public class CubePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -22,6 +23,7 @@ public class CubePanel extends JPanel {
 	int len = 70; // length of each small cube on the panel
 
 	public CubePanel(Cube cube) {
+		
 		this.cube = cube;
 		
 		frontInfoList = cube.frontInfoList;
@@ -34,22 +36,24 @@ public class CubePanel extends JPanel {
 	}
 	
 	public void paintComponent(Graphics g) {
+		
 		Graphics2D g2d = (Graphics2D) g;
 		
-		fillFront(g2d);
-		fillBack(g2d);
-		fillLeft(g2d);
-		fillRight(g2d);
-		fillUp(g2d);
-		fillDown(g2d);
+		// fill with different colors
+		fillFront(g2d); // front: red
+		fillBack(g2d); // back: orange
+		fillLeft(g2d); // left: green
+		fillRight(g2d); // right: blue
+		fillUp(g2d); // up: white
+		fillDown(g2d); // down: yellow
 		
 		g2d.setColor(new Color(0, 0, 0)); // black border
-		drawBorder(g2d, len*3, len*3); // front: red
-		drawBorder(g2d, len*3, len*7); // back: orange
-		drawBorder(g2d, len, len*3); // left: green
-		drawBorder(g2d, len*5, len*3); // right: blue
-		drawBorder(g2d, len*3, len); // up: white
-		drawBorder(g2d, len*3, len*5); // down: yellow
+		drawBorder(g2d, len*3, len*3); 
+		drawBorder(g2d, len*3, len*7); 
+		drawBorder(g2d, len, len*3); 
+		drawBorder(g2d, len*5, len*3); 
+		drawBorder(g2d, len*3, len); 
+		drawBorder(g2d, len*3, len*5); 
 		
 		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 22)); 
 		g2d.drawString("FRONT", len*4, len*4);
@@ -62,6 +66,7 @@ public class CubePanel extends JPanel {
 	}
 	
 	void drawBorder(Graphics g2d, int x, int y) {
+		
 		((Graphics2D) g2d).setStroke(new BasicStroke(3));
 		g2d.drawRect(x, y, len, len);
 		g2d.drawRect(x + len, y, len, len);
@@ -122,6 +127,7 @@ public class CubePanel extends JPanel {
 	}
 	
 	void fillColors(Graphics g2d, int x, int y, ArrayList<String> colors) {
+		
 		String currentColor = colors.get(0);
 		setCurrentColor(g2d, currentColor);
 		g2d.fillRect(x, y, len, len);
@@ -141,6 +147,7 @@ public class CubePanel extends JPanel {
 	}
 	
 	void setCurrentColor(Graphics g2d, String currentColor) {
+		
 		if (currentColor == "red") {
 			g2d.setColor(new Color(255,0,0));
 		}

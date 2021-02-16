@@ -9,14 +9,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
 public class Test {
+	
+	// graphics elements
 	JButton resetButton = new JButton("Reset");
-	JTextField inputField = new JTextField(2);
+	JTextField inputField = new JTextField(3);
     Document inputDoc = inputField.getDocument();
+    JButton enterButton = new JButton("Enter");
     JTextArea report = new JTextArea(7, 0);
     
     Cube cube = new Cube();
@@ -25,14 +26,15 @@ public class Test {
     JPanel botPanel = new JPanel();
     JFrame frame = new JFrame("RubiksCube");
     
-    // keep track of turns before resetting the cube
-    int totalTurns = 0;
+    int totalTurns = 0; // keep track of turns before resetting the cube
 	
     // make it a class for testing purpose/ adding other functions in the future
 	public Test() {
+		
 		sidePanel.add(resetButton);
 		sidePanel.add(new JLabel("How many turns:"));
         sidePanel.add(inputField);
+        sidePanel.add(enterButton);
         
         botPanel.add(report);
         botPanel.setBackground(Color.LIGHT_GRAY);
@@ -45,7 +47,7 @@ public class Test {
         frame.getContentPane().add(new JScrollPane(botPanel), BorderLayout.SOUTH);
         frame.setVisible(true);
         
-        resetButton.addActionListener(new ActionListener() {
+        resetButton.addActionListener(new ActionListener() {	
             public void actionPerformed(ActionEvent e) {
             	cube.reset();
                 cubePanel.repaint();
@@ -53,28 +55,38 @@ public class Test {
                 totalTurns = 0;
             }
         });
+        
+        enterButton.addActionListener(new ActionListener() {     	
+            public void actionPerformed(ActionEvent e) {
+            	update();
+            }
+        });     
 
-        inputDoc.addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-                update();
-            }
-            public void insertUpdate(DocumentEvent e) {
-                update();
-            }
-            public void removeUpdate(DocumentEvent e) {
-                //updateReport();
-            }
-        });
+//        inputDoc.addDocumentListener(new DocumentListener() {
+//        	
+//            public void changedUpdate(DocumentEvent e) {
+//                update();
+//            }
+//            public void insertUpdate(DocumentEvent e) {
+//                update();
+//            }
+//            public void removeUpdate(DocumentEvent e) {
+//                update();
+//            }
+//        });
         
     }
 	
 	public static void main(String[] args) throws InterruptedException {
+		
 		Test test = new Test();
-		test.frame.setSize(820, 900);
+		test.frame.setSize(900, 900);
 		
 	}
 	
+	/* update the text area on the bottom panel */
 	void update() {
+		
 		try {
             String turns = inputDoc.getText(0, inputDoc.getLength());
             totalTurns += Integer.parseInt(turns);
@@ -88,17 +100,6 @@ public class Test {
         } catch (Exception e) {
             report.setText(e.toString());
         }
-		
-	}
-	
-	void printResult() {
-		System.out.print(cube.frontInfoList.toString());
-		System.out.print(cube.backInfoList.toString());
-		System.out.print(cube.leftInfoList.toString());
-		System.out.print(cube.rightInfoList.toString());
-		System.out.print(cube.upInfoList.toString());
-		System.out.print(cube.downInfoList.toString());
-		System.out.printf("%n");
 		
 	}
 
