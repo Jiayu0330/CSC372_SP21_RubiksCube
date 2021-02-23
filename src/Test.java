@@ -18,10 +18,11 @@ public class Test {
 	JTextField inputField = new JTextField(3);
     Document inputDoc = inputField.getDocument();
     JButton enterButton = new JButton("Enter");
-    JTextArea report = new JTextArea(7, 0);
+    JButton checkButton = new JButton("Solved?");
+    JTextArea report = new JTextArea(7, 70);
     
     Cube cube = new Cube();
-    JPanel cubePanel = new CubePanel(cube);
+    CubePanel cubePanel = new CubePanel(cube);
     JPanel sidePanel = new JPanel();
     JPanel botPanel = new JPanel();
     JFrame frame = new JFrame("RubiksCube");
@@ -35,6 +36,7 @@ public class Test {
 		sidePanel.add(new JLabel("How many turns:"));
         sidePanel.add(inputField);
         sidePanel.add(enterButton);
+        sidePanel.add(checkButton);
         
         botPanel.add(report);
         botPanel.setBackground(Color.LIGHT_GRAY);
@@ -60,7 +62,21 @@ public class Test {
             public void actionPerformed(ActionEvent e) {
             	update();
             }
-        });     
+        });
+        
+        checkButton.addActionListener(new ActionListener() {	
+            public void actionPerformed(ActionEvent e) {
+            	boolean isSolved = cube.isSolved();
+            	
+            	if (isSolved) {
+            		report.append("Solved. \n");
+            	}
+            	else {
+            		report.append("Not Solved. \n");
+            	}
+            }
+        });
+        
 
 //        inputDoc.addDocumentListener(new DocumentListener() {
 //        	
@@ -77,10 +93,20 @@ public class Test {
         
     }
 	
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		
 		Test test = new Test();
-		test.frame.setSize(900, 900);
+		test.frame.setSize(1000, 900);
+		
+		// test isSolved()
+//		test.cube.front(1);
+//		System.out.print(test.cube.isSolved() + " ");
+//		test.cube.back(3);
+//		System.out.print(test.cube.isSolved() + " ");
+//		test.cube.right(1);
+//		System.out.print(test.cube.isSolved() + " ");
+//		test.cube.left(3);
+//		System.out.print(test.cube.isSolved() + " ");
 		
 	}
 	
@@ -95,6 +121,9 @@ public class Test {
             cubePanel.repaint();     
             for (int i = 1; i < totalTurns + 1; i ++) {
             	report.append("Turn " + i + ": " + cube.side_direction_records.get(i - 1) + ". ");
+            	if (i%4 == 0) {
+            		report.append("\n");
+            	}
             }   
             report.append("\n");
         } catch (Exception e) {

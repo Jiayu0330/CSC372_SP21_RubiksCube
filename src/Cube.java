@@ -19,12 +19,12 @@ public class Cube implements A1Cube {
 	
 	public Cube() {
 		
-		frontInfoList = fillList(frontInfoList, "red");
-		backInfoList = fillList(backInfoList, "orange");
-		leftInfoList = fillList(leftInfoList, "green");
-		rightInfoList = fillList(rightInfoList, "blue");
-		upInfoList = fillList(upInfoList, "white");
-		downInfoList = fillList(downInfoList, "yellow");
+		fillList(frontInfoList, "red");
+		fillList(backInfoList, "orange");
+		fillList(leftInfoList, "green");
+		fillList(rightInfoList, "blue");
+		fillList(upInfoList, "white");
+		fillList(downInfoList, "yellow");
 		
 		solved = true;
 		
@@ -33,12 +33,11 @@ public class Cube implements A1Cube {
 	/* initialize an array with the same color
 	 * position 0: top-left corner; position 1: top-right corner; 
 	 * position 2: bottom-left corner; position 3: bottom-right corner */
-	ArrayList<String> fillList(ArrayList<String> list, String color) {
+	void fillList(ArrayList<String> list, String color) {
 		
 		for (int i = 0; i < 4; i++) {
 			list.add(color);
 		}	
-		return list;
 		
 	}
 	
@@ -400,12 +399,12 @@ public class Cube implements A1Cube {
 	/* reset the cube to its solved status */
 	public void reset() {	
 		
-		frontInfoList = resetList(frontInfoList, "red");
-		backInfoList = resetList(backInfoList, "orange");
-		leftInfoList = resetList(leftInfoList, "green");
-		rightInfoList = resetList(rightInfoList, "blue");
-		upInfoList = resetList(upInfoList, "white");
-		downInfoList = resetList(downInfoList, "yellow");
+		resetList(frontInfoList, "red");
+		resetList(backInfoList, "orange");
+		resetList(leftInfoList, "green");
+		resetList(rightInfoList, "blue");
+		resetList(upInfoList, "white");
+		resetList(downInfoList, "yellow");
 		
 		// clear side_direction_records
 		side_direction_records.clear();
@@ -413,20 +412,29 @@ public class Cube implements A1Cube {
 		
 	}
 	
-	ArrayList<String> resetList(ArrayList<String> list, String color) {
+	void resetList(ArrayList<String> list, String color) {
 		
 		for (int i = 0; i < 4; i++) {
 			list.set(i, color);
 		}	
-		
-		return list;
 		
 	}
 	
 	/* return a copy of the cube */
 	public A1Cube clone() {
 		
-		return this;
+		Cube cube_copy = new Cube();
+		
+		cube_copy.frontInfoList = this.frontInfoList;
+		cube_copy.backInfoList = this.backInfoList;
+		cube_copy.leftInfoList = this.leftInfoList;
+		cube_copy.rightInfoList = this.rightInfoList;
+		cube_copy.upInfoList = this.upInfoList;
+		cube_copy.downInfoList = this.downInfoList;
+		cube_copy.side_direction_records = this.side_direction_records;
+		cube_copy.solved = this.solved;
+		
+		return cube_copy;
 		
 	}
 	
