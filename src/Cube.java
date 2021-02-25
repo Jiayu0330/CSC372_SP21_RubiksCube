@@ -12,6 +12,10 @@ public class Cube implements A1Cube {
 	ArrayList<String> upInfoList = new ArrayList<String>();
 	ArrayList<String> downInfoList = new ArrayList<String>();
 	
+	// record last selected side and direction
+	int lastSide = 0;
+	int lastTurns = 0;
+	
 	// record random selected side and direction to rotate
 	ArrayList<String> side_direction_records = new ArrayList<String>();
 	
@@ -228,13 +232,10 @@ public class Cube implements A1Cube {
 	/* choose a random side and direction that do not undo the last turn */
 	public void randomize(int k) {
 		
-		// record last selected side and direction
-		int lastSide = 0;
-		int lastTurns = 0;
-		
 		String side_direction; // for printing purpose
 		
 		for (int i = 0; i < k; i++) {
+			System.out.print("i: " + i + "; ");
 			// if the cube is in solved status, it's okay to rotate any side in any direction
 			if (solved) {
 				// choose a random side
@@ -405,6 +406,10 @@ public class Cube implements A1Cube {
 		resetList(rightInfoList, "blue");
 		resetList(upInfoList, "white");
 		resetList(downInfoList, "yellow");
+		
+		// reset last side and direction to 0
+		lastSide = 0;
+		lastTurns = 0;
 		
 		// clear side_direction_records
 		side_direction_records.clear();
