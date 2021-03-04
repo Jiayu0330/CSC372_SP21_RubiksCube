@@ -23,16 +23,26 @@ public class Cube implements A1Cube {
 	
 	public Cube() {
 		
-		fillList(frontInfoList, "red");
-		fillList(backInfoList, "orange");
-		fillList(leftInfoList, "green");
-		fillList(rightInfoList, "blue");
-		fillList(upInfoList, "white");
-		fillList(downInfoList, "yellow");
+		fillList(frontInfoList, "R");
+		fillList(backInfoList, "O");
+		fillList(leftInfoList, "G");
+		fillList(rightInfoList, "B");
+		fillList(upInfoList, "W");
+		fillList(downInfoList, "Y");
 		
 		solved = true;
 		
 	}
+	
+	// copy constructor
+	public Cube(Cube cube) {
+        frontInfoList = new ArrayList<String>(cube.frontInfoList);
+        backInfoList = new ArrayList<String>(cube.backInfoList);
+        leftInfoList = new ArrayList<String>(cube.leftInfoList);
+        rightInfoList = new ArrayList<String>(cube.rightInfoList);
+        upInfoList = new ArrayList<String>(cube.upInfoList);
+        downInfoList = new ArrayList<String>(cube.downInfoList);
+    }
 	
 	/* initialize an array with the same color
 	 * position 0: top-left corner; position 1: top-right corner; 
@@ -235,7 +245,7 @@ public class Cube implements A1Cube {
 		String side_direction; // for printing purpose
 		
 		for (int i = 0; i < k; i++) {
-			System.out.print("i: " + i + "; ");
+			//System.out.print("i: " + i + "; ");
 			// if the cube is in solved status, it's okay to rotate any side in any direction
 			if (solved) {
 				// choose a random side
@@ -311,8 +321,8 @@ public class Cube implements A1Cube {
 					direction = "Counterclockwise";
 				}
 				
-				System.out.print("Last side: " + lastSide + "; Last direction: " + lastTurns);
-				System.out.print("; Current side: " + whichSide + "; Current direction: " + turns + " | ");
+//				System.out.print("Last side: " + lastSide + "; Last direction: " + lastTurns);
+//				System.out.print("; Current side: " + whichSide + "; Current direction: " + turns + " | ");
 				
 				
 				boolean undo = ifUndo(lastTurns, turns);
@@ -321,7 +331,7 @@ public class Cube implements A1Cube {
 						// if undo, randomize again
 						whichSide = rn.nextInt(6) + 1;
 						undo = ifUndo(lastTurns, turns);
-						System.out.print("Reradomized! ");
+						//System.out.print("Reradomized! ");
 					}
 				}
 				else if (lastSide == 3 || lastSide == 4) {
@@ -329,7 +339,7 @@ public class Cube implements A1Cube {
 						// if undo, randomize again
 						whichSide = rn.nextInt(6) + 1;
 						undo = ifUndo(lastTurns, turns);
-						System.out.print("Reradomized! ");
+						//System.out.print("Reradomized! ");
 					}
 				}
 				else if (lastSide == 5 || lastSide == 6) {
@@ -337,7 +347,7 @@ public class Cube implements A1Cube {
 						// if undo, randomize again
 						whichSide = rn.nextInt(6) + 1;
 						undo = ifUndo(lastTurns, turns);
-						System.out.print("Reradomized! ");
+						//System.out.print("Reradomized! ");
 					}
 				}
 				
@@ -400,12 +410,12 @@ public class Cube implements A1Cube {
 	/* reset the cube to its solved status */
 	public void reset() {	
 		
-		resetList(frontInfoList, "red");
-		resetList(backInfoList, "orange");
-		resetList(leftInfoList, "green");
-		resetList(rightInfoList, "blue");
-		resetList(upInfoList, "white");
-		resetList(downInfoList, "yellow");
+		resetList(frontInfoList, "R");
+		resetList(backInfoList, "O");
+		resetList(leftInfoList, "G");
+		resetList(rightInfoList, "B");
+		resetList(upInfoList, "W");
+		resetList(downInfoList, "Y");
 		
 		// reset last side and direction to 0
 		lastSide = 0;
@@ -428,19 +438,19 @@ public class Cube implements A1Cube {
 	/* return a copy of the cube */
 	public A1Cube clone() {
 		
-		Cube cube_copy = new Cube();
+		// copy using copy constructor
+		return new Cube(this);
 		
-		cube_copy.frontInfoList = this.frontInfoList;
-		cube_copy.backInfoList = this.backInfoList;
-		cube_copy.leftInfoList = this.leftInfoList;
-		cube_copy.rightInfoList = this.rightInfoList;
-		cube_copy.upInfoList = this.upInfoList;
-		cube_copy.downInfoList = this.downInfoList;
-		cube_copy.side_direction_records = this.side_direction_records;
-		cube_copy.solved = this.solved;
+	}
+	
+	public String toString() {
+		// tell the front side
+		String description = "Facing: ";
+		for (int i = 0; i < 4; i++) {
+			description = description + frontInfoList.get(i);
+		}
 		
-		return cube_copy;
-		
+		return description;
 	}
 	
 }
