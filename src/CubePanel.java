@@ -55,7 +55,7 @@ public class CubePanel extends JPanel {
 		drawBorder(g2d, len*3, len); 
 		drawBorder(g2d, len*3, len*5); 
 		
-		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 22)); 
+		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 21)); 
 		g2d.drawString("FRONT", len*4, len*4);
 		g2d.drawString("BACK", len*4, len*8);
 		g2d.drawString("LEFT", len*2, len*4);
@@ -148,19 +148,19 @@ public class CubePanel extends JPanel {
 	
 	void setCurrentColor(Graphics g2d, String currentColor) {
 		
-		if (currentColor == "red") {
+		if (currentColor == "R") {
 			g2d.setColor(new Color(255,0,0));
 		}
-		else if (currentColor == "orange") {
+		else if (currentColor == "O") {
 			g2d.setColor(new Color(255,165,0));
 		}
-		else if (currentColor == "green") {
+		else if (currentColor == "G") {
 			g2d.setColor(new Color(0,128,0));
 		}
-		else if (currentColor == "blue") {
+		else if (currentColor == "B") {
 			g2d.setColor(new Color(0,0,255));
 		}
-		else if (currentColor == "white") {
+		else if (currentColor == "W") {
 			g2d.setColor(new Color(255,255,255));
 		}
 		else {

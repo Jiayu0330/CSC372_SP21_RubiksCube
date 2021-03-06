@@ -1,20 +1,47 @@
 import java.util.ArrayList;
 
-public class CubeSolver {
+public class A2 {
 	Node root;
 	boolean found = false; // check if the goal state is found
 	ArrayList<String> path = new ArrayList<String>();
-	//ArrayList<String> whichSide = new ArrayList<String>();
+	Test test;
+	int totalVisited; // total number of nodes visited
 	
-	public CubeSolver(Cube cube) {
+	public A2(Cube cube, int k) {
+//		test = new Test(cube); // A1 interface
+//		test.frame.setSize(735, 900);
+//		test.report.setText("Random k = " + k + "\n");
+//		test.report.append("Solving...\n");
 		root = new Node(cube, null, "Start"); // Node(Cube, parentNode, currentAction)
+
 		IDAStar();
-		
 	}
 	
 	public static void main(String[] args) {
-		Cube cube = new Cube();
+		for (int k = 1; k < 15; k++) { // 1 to 14
+			System.out.println("k = " + k + ":");
+			long totalTime = 0; // total time to solve 10 cubes
+			for (int i = 1; i < 11; i++) {
+				System.out.print("Cube" + i);
+				Cube cube = new Cube();
+				cube.randomize(k);
+
+				long start = System.nanoTime();
+				@SuppressWarnings("unused")
+				A2 solver = new A2(cube, k);
+				long end = System.nanoTime();
+				
+				long time = (end - start)/ 1000000;
+				totalTime += time;
+				System.out.println(time + " milliseconds.");		
+			}
+			System.out.println("Average time: " + totalTime/10 + " milliseconds.");
+			System.out.println("=====");
+        }
 		
+//		Cube cube = new Cube();
+		
+		// first way to generate the cube
 //		cube.frontInfoList.set(0, "W");
 //		cube.frontInfoList.set(1, "Y");
 //		cube.frontInfoList.set(2, "O");
@@ -45,17 +72,23 @@ public class CubeSolver {
 //		cube.downInfoList.set(2, "Y");
 //		cube.downInfoList.set(3, "W");
 		
-//		cube.left(1);
-//		cube.right(3);
+		// second way to generate the cube
+//		cube.back(2);
+//		cube.down(2);
+//		cube.left(2);
+//		cube.back(1);
+//		cube.front(2);
+//		cube.right(1);
+//		cube.up(2);
 		
-		int k = 10;
-		cube.randomize(k);
-		for (int i = 1; i < k + 1; i ++) {
-        	System.out.println("Turn " + i + ": " + cube.side_direction_records.get(i - 1) + ". ");
-        }
-		
-		@SuppressWarnings("unused")
-		CubeSolver solver = new CubeSolver(cube);
+		// third way to generate the cube
+//		cube.randomize(k);
+//		for (int i = 1; i < k + 1; i ++) {
+//        	System.out.println("Turn " + i + ": " + cube.side_direction_records.get(i - 1) + ". ");
+//        }
+//		
+//		@SuppressWarnings("unused")
+//		A2 solver = new A2(cube, k);
 	}
 	
 	/* IDA* search algorithm
@@ -74,20 +107,18 @@ public class CubeSolver {
 			System.out.println("It is already solved.");
 		}
 		else {
-			//System.out.println(root.cube.toString());
 			float threshold = getHeuristicScore(root); // threshold = h(n)
-			int counter = 0; // the number of times that the threshold increases/loop from the root node
+//			int counter = 0; // the number of times that the threshold increases/loop from the root node
 			while (true) {
-				System.out.print("Counter: " + counter);
-				System.out.println("; Threshold: " + threshold);
+//				System.out.print("Counter: " + counter);
+//				System.out.println("; Threshold: " + threshold);
 				float newT = search(root, 0, threshold); 
 				// search(): returns the minimum value that exceeds current threshold as new threshold
 				if (found == true) {
 					return;
 				}
-				counter++;
+//				counter++;
 				threshold = newT;
-				// assume it always finds the goal state since it is a cube solver
 			}
 		}
 	}
@@ -98,11 +129,7 @@ public class CubeSolver {
 	 * In other words, it cuts off branches that have greater fScore than the current threshold
 	 */
 	float search(Node node, int gScore, float threshold) {
-		// add children to the node if it has no child
-		if (node.children.isEmpty() == true) {
-			addChildren(node);
-		}
-
+		totalVisited ++;
 		float fScore = (float)(getHeuristicScore(node) + gScore);
 		
 		if (fScore > threshold) {
@@ -113,41 +140,35 @@ public class CubeSolver {
 		if (getHeuristicScore(node) == 0) {
 			// h = 0 means that the current node has the goal state
 			found = true; // set boolean found to true
-			System.out.println("FOUND!");
+//			System.out.println("FOUND!");
 			
-			path.add("Turn " + node.action); // add path
-			//whichSide.add(node.cube.toString() + " <-");
+			path.add(node.action); // store the solution sequence
 			
 			int steps = 0;
 			while (node.parent != null) {
 				steps++;
-				if (node.parent.action == "Start") {
-					path.add(node.parent.action + "->");
+				if (node.parent.action != "Start") {
+					path.add(node.parent.action + " -> ");	
 				}
-				else {
-					path.add("Turn " + node.parent.action + "->");	
-				}	
-				//whichSide.add(node.parent.cube.toString() + " <-");
 				node.parent = node.parent.parent;
-//				if (node.parent == root) {
-//					for (int i = 0; i < 4; i++) {
-//						System.out.println(root.cube.frontInfoList.get(i));
-//					}
-//				}
 			}
 			
-			System.out.println(steps + " steps.");
-			for (int i = steps; i >= 0; i--) {
-				System.out.print(path.get(i));
-				//System.out.print(whichSide.get(i));
-				//System.out.println();
-			}
+			System.out.print(" visited " + totalVisited + " nodes.");
+			System.out.print(" Took "+ steps + " steps and ");
+//			test.report.append(steps + " steps to solve the cube:\n");
+//			for (int i = (steps-1); i >= 0; i--) {
+//				test.report.append(path.get(i));
+//			}
+//			test.report.append("\n");
 			
+			totalVisited = 0; // reset it to 0 for the next cube
 			return 0; // doesn't matter what to return because the goal state has been found
 		}
 		
 		float min = Float.MAX_VALUE;
-		for (Node n : node.children) {
+		ArrayList<Node> children = new ArrayList<Node>();
+		addChildren(node, children);
+		for (Node n : children) {
 			float newT = search(n, gScore + 1, threshold); // recursion: add gScore by 1
 			if (found == true) {
 				
@@ -157,7 +178,7 @@ public class CubeSolver {
 				float newMin = newT;
 				if (newMin < min) {
 					min = newMin; 
-					// minimal value that exceeds the current threshold in the current loop
+					// minimal f value that exceeds the current threshold in the current loop
 				}
 			}
 		}
@@ -260,7 +281,7 @@ public class CubeSolver {
 		return misplacedNum;
 	}
 	
-	void addChildren(Node node) {
+	void addChildren(Node node, ArrayList<Node> children) {
 		// add possible actions to the current node
 		Cube cube1 = (Cube) node.cube.clone();
 		Cube cube2 = (Cube) node.cube.clone();
@@ -276,25 +297,25 @@ public class CubeSolver {
 //		Cube cube12 = (Cube) node.cube.clone();
 		
 		cube1.front(1);
-		Node F1 = new Node(cube1, node, "Front Clockwise"); // F1 = front clockwise
+		Node F1 = new Node(cube1, node, "F"); // F1 = front clockwise
 		cube2.front(3);
-		Node F3 = new Node(cube2, node, "Front Counterclockwise"); // F3 = front counterclockwise
+		Node F3 = new Node(cube2, node, "F'"); // F3 = front counterclockwise
 //		cube3.back(1);
 //		Node B1 = new Node(cube3, node, "Back Clockwise"); // B1 = back clockwise
 //		cube4.back(3);
 //		Node B3 = new Node(cube4, node, "Back Counterclockwise"); // B3 = back counterclockwise
 		cube5.left(1);
-		Node L1 = new Node(cube5, node, "Left Clockwise"); // L1 = left clockwise
+		Node L1 = new Node(cube5, node, "L"); // L1 = left clockwise
 		cube6.left(3);
-		Node L3 = new Node(cube6, node, "Left Counterclockwise"); // L3 = left counterclockwise
+		Node L3 = new Node(cube6, node, "L'"); // L3 = left counterclockwise
 //		cube7.right(1);
 //		Node R1 = new Node(cube7, node, "Right Clockwise"); // R1 = right clockwise
 //		cube8.right(3);
 //		Node R3 = new Node(cube8, node, "Right Counterclockwise"); // R3 = right counterclockwise
 		cube9.up(1);
-		Node U1 = new Node(cube9, node, "Up Clockwise"); // U1 = up clockwise
+		Node U1 = new Node(cube9, node, "U"); // U1 = up clockwise
 		cube10.up(3);
-		Node U3 = new Node(cube10, node, "Up Counterclockwise"); // U3 = up counterclockwise
+		Node U3 = new Node(cube10, node, "U'"); // U3 = up counterclockwise
 //		cube11.down(1);
 //		Node D1 = new Node(cube11, node, "Down Clockwise"); // D1 = down clockwise
 //		cube12.down(3);
@@ -302,66 +323,61 @@ public class CubeSolver {
 		
 		// there are 6 possible actions for the initial state
 		if (node.action == "Start") {
-			node.children.add(F1);
-			node.children.add(F3);
-			node.children.add(L1);
-			node.children.add(L3);
-			node.children.add(U1);
-			node.children.add(U3);
+			children.add(F1);
+			children.add(F3);
+			children.add(L1);
+			children.add(L3);
+			children.add(U1);
+			children.add(U3);
 		}
 		
 		// but 5 for the rest of states because we don't want to undo the last action
-		else if (node.action == "Front Clockwise") {
-			node.children.add(F1);
-			node.children.add(L1);
-			node.children.add(L3);
-			node.children.add(U1);
-			node.children.add(U3);
+		else if (node.action == "F") {
+			children.add(F1);
+			children.add(L1);
+			children.add(L3);
+			children.add(U1);
+			children.add(U3);
 		}
 		
-		else if (node.action == "Front Counterclockwise") {
-			node.children.add(F3);
-			node.children.add(L1);
-			node.children.add(L3);
-			node.children.add(U1);
-			node.children.add(U3);
+		else if (node.action == "F'") {
+			children.add(F3);
+			children.add(L1);
+			children.add(L3);
+			children.add(U1);
+			children.add(U3);
 		}
 		
-		else if (node.action == "Left Clockwise") {
-			node.children.add(F1);
-			node.children.add(F3);
-			node.children.add(L1);
-			node.children.add(U1);
-			node.children.add(U3);
+		else if (node.action == "L") {
+			children.add(F1);
+			children.add(F3);
+			children.add(L1);
+			children.add(U1);
+			children.add(U3);
 		}
 		
-		else if (node.action == "Left Counterclockwise") {
-			node.children.add(F1);
-			node.children.add(F3);
-			node.children.add(L3);
-			node.children.add(U1);
-			node.children.add(U3);
+		else if (node.action == "L'") {
+			children.add(F1);
+			children.add(F3);
+			children.add(L3);
+			children.add(U1);
+			children.add(U3);
 		}
 		
-		else if (node.action == "Up Clockwise") {
-			node.children.add(F1);
-			node.children.add(F3);
-			node.children.add(L1);
-			node.children.add(L3);
-			node.children.add(U1);
+		else if (node.action == "U") {
+			children.add(F1);
+			children.add(F3);
+			children.add(L1);
+			children.add(L3);
+			children.add(U1);
 		}
 		
-		else if (node.action == "Up Counterclockwise") {
-			node.children.add(F1);
-			node.children.add(F3);
-			node.children.add(L1);
-			node.children.add(L3);
-			node.children.add(U3);
-		}
-		
-		else {
-			System.out.println("Error!");
+		else if (node.action == "U'") {
+			children.add(F1);
+			children.add(F3);
+			children.add(L1);
+			children.add(L3);
+			children.add(U3);
 		}
 	}
-
 }

@@ -26,10 +26,10 @@ public class Test {
     JButton rightButton = new JButton("Right");
     JButton upButton = new JButton("Up");
     JButton downButton = new JButton("Down");
-    JTextArea report = new JTextArea(7, 50);
+    JTextArea report = new JTextArea(8, 50);
     
-    Cube cube = new Cube();
-    CubePanel cubePanel = new CubePanel(cube);
+    Cube cube;
+    CubePanel cubePanel;
     JPanel sidePanel = new JPanel();
     JPanel botPanel = new JPanel();
     JFrame frame = new JFrame("RubiksCube");
@@ -37,8 +37,10 @@ public class Test {
     int totalTurns = 0; // keep track of turns before resetting the cube
 	
     // make it a class for testing purpose/ adding other functions in the future
-	public Test() {
+	public Test(Cube cube) {
 		
+		this.cube = cube;
+		this.cubePanel = new CubePanel(cube);
 		sidePanel.setLayout(new GridLayout(20,0));
 		sidePanel.add(resetButton);
 		sidePanel.add(checkButton);
@@ -156,16 +158,6 @@ public class Test {
 //		
 //		Test test = new Test();
 //		test.frame.setSize(750, 900);
-//		
-//		// test isSolved()
-////		test.cube.front(1);
-////		System.out.print(test.cube.isSolved() + " ");
-////		test.cube.back(3);
-////		System.out.print(test.cube.isSolved() + " ");
-////		test.cube.right(1);
-////		System.out.print(test.cube.isSolved() + " ");
-////		test.cube.left(3);
-////		System.out.print(test.cube.isSolved() + " ");
 //		
 //	}
 	
